@@ -1,0 +1,21 @@
+/*
+	###################
+	
+	#Componentes
+	
+	###################
+*/
+
+/* Field Action */
+
+.bw-glyphicon-large {
+	font-size: 18px;
+}
+
+.bw-field-action {
+	display: flex; /* Envolve os itens contidos no elemento que receber este estilo */
+}
+
+.bw-field-action__icon {
+	margin: 6px 0 0 5px;
+}

@@ -1,5 +1,8 @@
 package com.estudo.brewer.config.init;
 
+import javax.servlet.Filter;
+
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import com.estudo.brewer.config.WebConfig;
@@ -12,7 +15,7 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
 	}
 	
 	/**
-	 * 
+	 * Informando arquivo de configuração pra recepção dos controladores
 	 */
 	
 	@Override
@@ -21,12 +24,25 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
 	}
 	
 	/***
-	 * Recepciona as requisições web fornece um padrão url 
+	 * Recepciona as requisições web e fornece um padrão url 
 	 */
 	
 	@Override
 	protected String[] getServletMappings() {
 		return new String[] { "/" };
+	}
+	
+	/**
+	 * Forçando a codificação especificada
+	 */
+	
+	@Override
+	protected Filter[] getServletFilters() {
+		CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
+		characterEncodingFilter.setEncoding("UTF-8");
+		characterEncodingFilter.setForceEncoding(true);
+		
+		return new Filter[] { characterEncodingFilter };
 	}
 
 }

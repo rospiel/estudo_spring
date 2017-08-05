@@ -1,0 +1,21 @@
+<!-- 
+	Criando fragmentos pra serem importados nas páginas afim de que fique mais organizado
+	A marcação que será fragmentada deve recebe o atributo th:fragment="layout-footer" com um nome,
+	neste caso optamos por layout-footer
+
+ -->
+
+<!DOCTYPE html>
+<html lang="pt"
+	  xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+	  
+<body>
+	<footer class="aw-layout-footer  js-content" th:fragment="layout-footer">
+		<div class="container-fluid">
+			<span class="aw-footer-disclaimer">&copy; 2016 AlgaWorks. Todos os direitos reservados.</span>
+		</div>
+	</footer>
+</body>	 
+</html>	
