@@ -51,6 +51,19 @@ public class CervejasController {
 		return "redirect:/cervejas/novo";
 	}
 	
+	@RequestMapping("/usuarios/novo")
+	public String novoUsuario(Cerveja cerveja) {
+		return "usuario/CadastroUsuario";
+	}
 	
+	@RequestMapping("/cidades/nova")
+	public String novaCidade(Cerveja cerveja) {
+		return "cidade/CadastroCidade";
+	}
+	
+	@RequestMapping("/estilos/novo")
+	public String novoEstilo(Cerveja cerveja) {
+		return "estilo/CadastroEstilo";
+	}
 	
 }
