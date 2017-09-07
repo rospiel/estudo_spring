@@ -11,6 +11,7 @@
 	<Loggers>
 		<!-- Informando que as classes do pacote controller serão logadas somente em nível error -->
 		<Logger name="com.algaworks.brewer.controller" level="error"/>
+		<Logger name="org.hibernate.SQL" level="debug"/>
 	
 		<!-- Default para demais pacotes e respectivas classes -->
 		<Root level="error">
