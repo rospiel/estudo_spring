@@ -5,13 +5,19 @@ import javax.servlet.Filter;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+import com.estudo.brewer.config.JPAConfig;
+import com.estudo.brewer.config.ServiceConfig;
 import com.estudo.brewer.config.WebConfig;
 
 public class AppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
-
+	
+	/**
+	 * Informando arquivo de configuração pra acessar as bases de dados
+	 */
+	
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
-		return null;
+		return new Class<?>[] { JPAConfig.class, ServiceConfig.class };
 	}
 	
 	/**
@@ -23,7 +29,7 @@ public class AppInitializer extends AbstractAnnotationConfigDispatcherServletIni
 		return new Class<?>[] { WebConfig.class };
 	}
 	
-	/***
+	/**
 	 * Recepciona as requisições web e fornece um padrão url 
 	 */
 	

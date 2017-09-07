@@ -1,15 +1,23 @@
 package com.estudo.brewer.config;
 
+import java.math.BigDecimal;
+import java.util.Locale;
+
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.format.number.NumberStyleFormatter;
+import org.springframework.format.support.DefaultFormattingConversionService;
+import org.springframework.format.support.FormattingConversionService;
+import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.i18n.FixedLocaleResolver;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver;
@@ -18,6 +26,7 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 
 import com.estudo.brewer.controller.CervejasController;
+import com.estudo.brewer.controller.converter.EstiloConverter;
 
 import nz.net.ultraq.thymeleaf.LayoutDialect;
 
@@ -37,7 +46,7 @@ import nz.net.ultraq.thymeleaf.LayoutDialect;
  */
 
 @Configuration /* Se trata de uma classe de configuração */
-@ComponentScan(basePackageClasses = { CervejasController.class }) /* Informando a localização de um controlador */
+@ComponentScan(basePackageClasses = { CervejasController.class }) /* Informando a localização dos controladores */
 @EnableWebMvc /* Informando que se trata de um classe de projeto web */
 /* @ComponentScan("com.estudo.brewer.controller") --> Uma segunda maneira de informar o controlador */
 public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationContextAware {
@@ -105,6 +114,36 @@ public class WebConfig extends WebMvcConfigurerAdapter implements ApplicationCon
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/**").addResourceLocations("classpath:/static/");
 	}
-
 	
+	/**
+	 * Apontando a localização dos conversores
+	 * @return
+	 */
+	
+	@Bean
+	public FormattingConversionService mvcConversionService() {
+		DefaultFormattingConversionService conversionService = new DefaultFormattingConversionService();
+		conversionService.addConverter(new EstiloConverter());
+		
+		/* Repare que passamos o padrão internacional, através do idioma do cliente a conversão será realizada */
+		/* Informando conversor de String pra BigDecimal */
+		NumberStyleFormatter bigDecimalFormatter = new NumberStyleFormatter("#,##0.00");
+		conversionService.addFormatterForFieldType(BigDecimal.class, bigDecimalFormatter);
+		
+		/* Informando conversor de String pra BigDecimal */
+		NumberStyleFormatter integerFormatter = new NumberStyleFormatter("#,##0");
+		conversionService.addFormatterForFieldType(Integer.class, integerFormatter);
+		
+		return conversionService;
+	}
+	
+	/**
+	 * Informando o idioma da aplicação
+	 * @return
+	 */
+	
+	@Bean
+	public LocaleResolver localeResolver() {
+		return new FixedLocaleResolver(new Locale("pt", "BR"));
+	}
 }
