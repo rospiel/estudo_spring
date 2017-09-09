@@ -20,19 +20,27 @@ import com.estudo.brewer.model.Estilo;
 import com.estudo.brewer.service.CadastroEstiloService;
 import com.estudo.brewer.service.exception.NomeEstiloJaCadastradoException;
 
+/*
+ * Informamos o @RequestMapping na classe quando a mais de um método com 
+ * o mesmo mapeamento, diferenciando apenas o que vem em seguida
+ * 
+ * */
+
+
 @Controller
+@RequestMapping("/estilos")
 public class EstilosController {
 	
 	@Autowired
 	private CadastroEstiloService cadastroEstiloService;
 	
-	@RequestMapping("/estilos/novo")
+	@RequestMapping("/novo")
 	public ModelAndView novo(Estilo estilo) {
 		ModelAndView mv = new ModelAndView("estilo/CadastroEstilo");
 		return mv;
 	}
 	
-	@RequestMapping(value = "/estilos/novo", method = RequestMethod.POST )
+	@RequestMapping(value = "/novo", method = RequestMethod.POST )
 	public ModelAndView cadastrar(@Valid Estilo estilo, BindingResult result, Model model, RedirectAttributes attributes) {
 		if(result.hasErrors()) {
 			model.addAttribute(estilo);
@@ -57,20 +65,24 @@ public class EstilosController {
 	 * 				meio do Jackson.
 	 * 
 	 * */
-	@RequestMapping(value = "/estilos", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE })
+	@RequestMapping(method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE })
 	public @ResponseBody ResponseEntity<?> salvar(@RequestBody @Valid  Estilo estilo, BindingResult result) {
 		if(result.hasErrors()) {
-			/* Retornando o response o erro identificado */
+			/* Retornando o response o erro(400)  identificado */
 			return ResponseEntity.badRequest().body(result.getFieldError("nome").getDefaultMessage());
 		}
 		
-		try {
-			estilo = cadastroEstiloService.salvar(estilo);
-		} catch (NomeEstiloJaCadastradoException erro) {
-			return ResponseEntity.badRequest().body(erro.getMessage());
-		}
+		/* ***** Retiramos o tratamento abaixo porque deixamos a carga da ControllerAdviceExceptionHandler a captura
+			try {
+				estilo = cadastroEstiloService.salvar(estilo);
+			} catch (NomeEstiloJaCadastradoException erro) {
+				return ResponseEntity.badRequest().body(erro.getMessage());
+			}
+		*/
 		
-		/* Tudo correu bem? Retorna o estilo afim de que seja acrescentado no combo de estilos */
+		estilo = cadastroEstiloService.salvar(estilo);
+		
+		/* Tudo correu bem? Retorna o estilo(200) afim de que seja acrescentado no combo de estilos */
 		return ResponseEntity.ok(estilo);
 		
 	}
